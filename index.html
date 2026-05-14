@@ -144,10 +144,11 @@
     <button class="tv-close" id="tv-close">✕</button>
   </div>
   <div class="tv-content" id="tv-content"><div class="tv-loading"><div class="tv-spinner"></div>Memuat...</div></div>
-  <div class="tv-footer">
+<div class="tv-footer">
     <div class="tv-stats" id="tv-stats"></div>
     <div class="tv-nav">
       <button class="btn btn-sec btn-xs" id="tv-prev">‹ Sebelum</button>
+      <button class="btn btn-xs" id="tv-copy" style="background:linear-gradient(135deg,#0891b2,#0e7490);box-shadow:none;">📋 Salin</button>
       <button class="btn btn-sec btn-xs" id="tv-next">Seterusnya ›</button>
     </div>
   </div>
@@ -669,6 +670,19 @@
   }
 
   document.getElementById('tv-close').onclick=closeViewer;
+  document.getElementById('tv-copy').onclick=async()=>{
+  const txt=document.getElementById('tv-content').textContent;
+  if(!txt||txt.includes('Memuat')){showToast('⚠️ Tiada teks untuk disalin.');return}
+  try{
+    await navigator.clipboard.writeText(txt);
+    const btn=document.getElementById('tv-copy');
+    btn.textContent='✅ Disalin!';
+    btn.style.background='linear-gradient(135deg,#16a34a,#15803d)';
+    setTimeout(()=>{btn.textContent='📋 Salin';btn.style.background='linear-gradient(135deg,#0891b2,#0e7490)'},2000);
+  }catch(e){
+    showToast('❌ Gagal salin. Cuba semula.');
+  }
+};
   document.getElementById('tv-prev').onclick=()=>{if(viewerIdx>0){viewerIdx--;loadFrame()}};
   document.getElementById('tv-next').onclick=()=>{if(viewerIdx<viewerPages.length-1){viewerIdx++;loadFrame()}};
 
