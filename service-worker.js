@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dictroot-v1';
+const CACHE_NAME = 'dictroot-v2';
 const PRECACHE = ['./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install', e => {
