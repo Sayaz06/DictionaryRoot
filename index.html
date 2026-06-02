@@ -30,6 +30,10 @@
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-shrink:0;flex-wrap:wrap;gap:8px;z-index:10}
     .topbar-title{font-size:1.05rem;font-weight:700}.topbar-sub{font-size:.75rem;color:var(--subtext);margin-top:2px}
 
+    /* BREADCRUMB */
+    .breadcrumb{display:flex;align-items:center;gap:4px;font-size:.72rem;color:var(--subtext);margin-bottom:10px;flex-shrink:0;flex-wrap:wrap}
+    .breadcrumb-sep{opacity:.4}.breadcrumb-cur{color:var(--accent2);font-weight:700}
+
     .login-wrap{margin:auto 0;padding:24px 0}
     .login-logo{font-size:3rem;text-align:center;margin-bottom:10px}
     .login-title{font-size:2.1rem;font-weight:900;text-align:center;margin-bottom:6px;background:linear-gradient(135deg,var(--accent),var(--accent2),#a7f3d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -50,6 +54,19 @@
     .kamus-name-input:focus{border-bottom-color:var(--accent)}
     .kamus-open-btn{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.35);color:var(--accent2);border-radius:8px;padding:6px 12px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s}
     .kamus-open-btn:hover{background:rgba(16,185,129,.22)}
+
+    /* JENIS KATA GRID */
+    .jk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px}
+    .jk-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 14px;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .15s;position:relative;overflow:hidden}
+    .jk-card:hover{border-color:var(--border-mid);box-shadow:0 4px 14px rgba(0,0,0,.3);background:rgba(25,45,75,.9)}
+    .jk-card:active{transform:scale(.97)}
+    .jk-code{font-size:1.1rem;font-weight:900;color:var(--accent2);letter-spacing:.06em;font-family:'Courier New',monospace}
+    .jk-name{font-size:.75rem;color:var(--subtext);margin-top:3px;font-weight:500}
+    .jk-count{position:absolute;top:10px;right:11px;font-size:.65rem;font-weight:700;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:var(--accent2);border-radius:999px;padding:2px 7px}
+    .jk-count.has-files{background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.45)}
+    .jk-done-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;position:absolute;bottom:10px;right:11px;display:none}
+    .jk-card.has-done .jk-done-dot{display:block}
+    .jk-arrow{position:absolute;bottom:10px;right:32px;font-size:.7rem;color:var(--subtext);opacity:.5}
 
     .empty-state{text-align:center;padding:36px 16px;color:var(--subtext);font-size:.85rem;display:flex;flex-direction:column;align-items:center;gap:10px}.empty-icon{font-size:2.4rem;opacity:.4}
 
@@ -144,7 +161,7 @@
     <button class="tv-close" id="tv-close">✕</button>
   </div>
   <div class="tv-content" id="tv-content"><div class="tv-loading"><div class="tv-spinner"></div>Memuat...</div></div>
-<div class="tv-footer">
+  <div class="tv-footer">
     <div class="tv-stats" id="tv-stats"></div>
     <div class="tv-nav">
       <button class="btn btn-sec btn-xs" id="tv-prev">‹ Sebelum</button>
@@ -191,7 +208,7 @@
     </div>
   </section>
 
-  <!-- HOME -->
+  <!-- HOME: SENARAI KAMUS -->
   <section id="section-home" class="section">
     <div class="topbar">
       <div><div class="topbar-title">📚 Senarai Kamus</div><div style="font-size:.72rem;color:var(--subtext)" id="home-email"></div></div>
@@ -202,15 +219,42 @@
     <div class="list-scroll" id="kamus-list"></div>
   </section>
 
-  <!-- PAGES -->
+  <!-- JENIS KATA -->
+  <section id="section-jenis-kata" class="section">
+    <div class="topbar">
+      <button class="btn btn-sec btn-sm" id="btn-jk-back">← Kamus</button>
+      <div style="text-align:right">
+        <div class="topbar-title" id="jk-kamus-title" style="color:var(--accent2);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</div>
+        <div class="topbar-sub">Pilih Jenis Kata</div>
+      </div>
+    </div>
+    <div class="breadcrumb flex-0">
+      <span id="bc-kamus-jk" style="cursor:pointer;color:var(--subtext)">—</span>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-cur">Jenis Kata</span>
+    </div>
+    <div class="list-scroll" id="jk-grid-wrap" style="overflow-y:auto"></div>
+  </section>
+
+  <!-- PAGES (fail MS) -->
   <section id="section-pages" class="section">
     <div class="topbar">
-      <button class="btn btn-sec btn-sm" id="btn-back-home">← Kamus</button>
-      <div style="text-align:right"><div class="topbar-title" id="pages-title" style="color:var(--accent2);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</div><div class="topbar-sub">Fail Teks MS</div></div>
+      <button class="btn btn-sec btn-sm" id="btn-back-jk">← Jenis Kata</button>
+      <div style="text-align:right">
+        <div class="topbar-title" id="pages-title" style="color:var(--accent2);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</div>
+        <div class="topbar-sub" id="pages-sub">Fail Teks MS</div>
+      </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">
         <button class="btn btn-purple btn-sm" id="btn-check-ms">🔍 Semak MS</button>
         <button class="btn btn-done-green btn-sm" id="btn-view-done">✅ Done</button>
       </div>
+    </div>
+    <div class="breadcrumb flex-0">
+      <span id="bc-kamus-pg" style="cursor:pointer;color:var(--subtext)">—</span>
+      <span class="breadcrumb-sep">›</span>
+      <span id="bc-jk-pg" style="cursor:pointer;color:var(--subtext)">—</span>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-cur">Fail MS</span>
     </div>
     <div id="trash-section" class="trash-section flex-0" style="display:none">
       <div class="trash-header" id="trash-toggle">🗑️ <span id="trash-label">Tong Sampah (0)</span><span id="trash-arrow" style="margin-left:auto;font-size:.7rem;color:var(--subtext)">▼</span></div>
@@ -247,7 +291,7 @@
   import{initializeApp}from"https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
   import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,setPersistence,browserLocalPersistence}
     from"https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-  import{getFirestore,doc,collection,addDoc,updateDoc,deleteDoc,onSnapshot,getDocs}
+  import{getFirestore,doc,collection,addDoc,updateDoc,deleteDoc,onSnapshot,getDocs,getDoc}
     from"https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
   import{getStorage,ref as sRef,uploadBytesResumable,getDownloadURL,deleteObject,getBytes}
     from"https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
@@ -264,8 +308,29 @@
   const app=initializeApp(firebaseConfig);
   const auth=getAuth(app),db=getFirestore(app),storage=getStorage(app),gProv=new GoogleAuthProvider();
 
-  let currentUser=null,currentKamusId=null,currentKamusNm="";
+  // ── 16 JENIS KATA dari kamus ──────────────────────────────────
+  const JENIS_KATA=[
+    {code:'awl', name:'Awalan'},
+    {code:'ka',  name:'Kata Adjektif'},
+    {code:'kad', name:'Kata Adverba'},
+    {code:'kb',  name:'Kata Bantu'},
+    {code:'kbil',name:'Kata Bilangan'},
+    {code:'kh',  name:'Kata Hubung'},
+    {code:'kk',  name:'Kata Kerja'},
+    {code:'kn',  name:'Kata Nama'},
+    {code:'knf', name:'Kata Nafi'},
+    {code:'kpn', name:'Kata Penegas'},
+    {code:'kp',  name:'Kata Penguat'},
+    {code:'kpm', name:'Kata Pemeri'},
+    {code:'ks',  name:'Kata Sendi Nama'},
+    {code:'ksr', name:'Kata Seru'},
+    {code:'kt',  name:'Kata Tugas'},
+    {code:'kty', name:'Kata Tanya'},
+  ];
+
+  let currentUser=null,currentKamusId=null,currentKamusNm="",currentJKCode=null,currentJKName="";
   let allKamus=[],allPages=[],kamusUnsub=null,pagesUnsub=null;
+  let jkCounts={};   // { code: { active: n, done: n } }
   let trashOpen=true,editingPageId=null;
   let viewerPages=[],viewerIdx=0;
   let uploadQueue=[],isUploading=false,qTotal=0,qDone=0;
@@ -331,29 +396,109 @@
   async function deleteKamusDeep(id){
     showToast('Sedang memadam…',0);
     try{
-      const snap=await getDocs(collection(db,'users',currentUser.uid,'kamus',id,'pages'));
-      for(const d of snap.docs){if(d.data().storagePath)try{await deleteObject(sRef(storage,d.data().storagePath))}catch(_){}await deleteDoc(d.ref)}
+      // Padam semua pages dalam setiap jenis kata
+      for(const jk of JENIS_KATA){
+        const snap=await getDocs(collection(db,'users',currentUser.uid,'kamus',id,'jenisKata',jk.code,'pages'));
+        for(const d of snap.docs){if(d.data().storagePath)try{await deleteObject(sRef(storage,d.data().storagePath))}catch(_){}await deleteDoc(d.ref)}
+      }
       await deleteDoc(doc(db,'users',currentUser.uid,'kamus',id));
       showToast('Kamus berjaya dipadam.');
     }catch(e){showToast('Gagal: '+e.message)}
   }
 
-  // ── OPEN KAMUS ─────────────────────────────────────────────────
+  // ── OPEN KAMUS → JENIS KATA ────────────────────────────────────
   function openKamus(id,name){
     currentKamusId=id;currentKamusNm=name;
+    document.getElementById('jk-kamus-title').textContent=name;
+    document.getElementById('bc-kamus-jk').textContent=name;
+    if(pagesUnsub){pagesUnsub();pagesUnsub=null;}
+    loadJKCounts();
+    goTo('section-jenis-kata');
+  }
+
+  // Kira berapa fail per jenis kata untuk tunjuk badge
+  async function loadJKCounts(){
+    jkCounts={};
+    if(!currentUser||!currentKamusId)return;
+    for(const jk of JENIS_KATA){
+      try{
+        const snap=await getDocs(collection(db,'users',currentUser.uid,'kamus',currentKamusId,'jenisKata',jk.code,'pages'));
+        let active=0,done=0;
+        snap.docs.forEach(d=>{const s=d.data().status;if(s==='active')active++;else if(s==='done')done++;});
+        jkCounts[jk.code]={active,done};
+      }catch(_){jkCounts[jk.code]={active:0,done:0};}
+    }
+    renderJKGrid();
+  }
+
+  function renderJKGrid(){
+    const wrap=document.getElementById('jk-grid-wrap');
+    wrap.innerHTML='';
+    const grid=document.createElement('div');grid.className='jk-grid';
+    JENIS_KATA.forEach(jk=>{
+      const c=jkCounts[jk.code]||{active:0,done:0};
+      const total=c.active+c.done;
+      const card=document.createElement('div');
+      card.className='jk-card'+(c.done>0?' has-done':'');
+      card.innerHTML=`
+        <div class="jk-code">${esc(jk.code)}</div>
+        <div class="jk-name">${esc(jk.name)}</div>
+        <span class="jk-count${total>0?' has-files':''}">${total} fail</span>
+        <span class="jk-done-dot" title="${c.done} selesai"></span>`;
+      card.onclick=()=>openJenisKata(jk.code,jk.name);
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+  }
+
+  // Balik ke home dari JK
+  document.getElementById('btn-jk-back').onclick=()=>{currentKamusId=null;currentKamusNm='';goTo('section-home')};
+  document.getElementById('bc-kamus-jk').onclick=()=>document.getElementById('btn-jk-back').click();
+
+  // ── OPEN JENIS KATA → PAGES ────────────────────────────────────
+  function openJenisKata(code,name){
+    currentJKCode=code;currentJKName=name;
     document.getElementById('pages-title').textContent=name;
-    document.getElementById('done-title').textContent=name;
+    document.getElementById('pages-sub').textContent=code.toUpperCase()+' • Fail Teks MS';
+    document.getElementById('done-title').textContent=currentKamusNm+' › '+name;
+    // Breadcrumb pages
+    document.getElementById('bc-kamus-pg').textContent=currentKamusNm;
+    document.getElementById('bc-jk-pg').textContent=name+' ('+code+')';
     subscribePages();goTo('section-pages');
   }
-  document.getElementById('btn-back-home').onclick=()=>{if(pagesUnsub){pagesUnsub();pagesUnsub=null}currentKamusId=null;goTo('section-home')};
+
+  // Navigasi balik dari pages
+  document.getElementById('btn-back-jk').onclick=()=>{
+    if(pagesUnsub){pagesUnsub();pagesUnsub=null;}
+    currentJKCode=null;currentJKName='';
+    loadJKCounts();
+    goTo('section-jenis-kata');
+  };
+  document.getElementById('bc-kamus-pg').onclick=()=>{
+    if(pagesUnsub){pagesUnsub();pagesUnsub=null;}
+    currentJKCode=null;currentJKName='';
+    currentKamusId=null;currentKamusNm='';
+    goTo('section-home');
+  };
+  document.getElementById('bc-jk-pg').onclick=()=>document.getElementById('btn-back-jk').click();
+
   document.getElementById('btn-view-done').onclick=()=>{renderDone();goTo('section-done')};
   document.getElementById('btn-back-pages').onclick=()=>goTo('section-pages');
 
+  // ── PATH HELPER ────────────────────────────────────────────────
+  // Firestore path: users/{uid}/kamus/{kamusId}/jenisKata/{jkCode}/pages
+  function pagesCol(){
+    return collection(db,'users',currentUser.uid,'kamus',currentKamusId,'jenisKata',currentJKCode,'pages');
+  }
+  function pageDoc(id){
+    return doc(db,'users',currentUser.uid,'kamus',currentKamusId,'jenisKata',currentJKCode,'pages',id);
+  }
+
   // ── PAGES SUBSCRIPTION ─────────────────────────────────────────
   function subscribePages(){
-    if(!currentUser||!currentKamusId)return;
+    if(!currentUser||!currentKamusId||!currentJKCode)return;
     if(pagesUnsub)pagesUnsub();
-    pagesUnsub=onSnapshot(collection(db,'users',currentUser.uid,'kamus',currentKamusId,'pages'),snap=>{
+    pagesUnsub=onSnapshot(pagesCol(),snap=>{
       allPages=snap.docs.map(d=>({id:d.id,...d.data()}));
       renderActive();renderTrash();
       if(document.getElementById('section-done').classList.contains('active'))renderDone();
@@ -364,7 +509,6 @@
   function renderActive(){
     const q=document.getElementById('pages-search').value.toLowerCase();
     const active=allPages.filter(p=>p.status==='active').sort((a,b)=>getMSNum(a.msName||'')-getMSNum(b.msName||''));
-    // storagePath disertakan untuk getBytes()
     viewerPages=active.map(p=>({msName:p.msName,url:p.storageUrl,id:p.id,originalName:p.originalName,storagePath:p.storagePath}));
     const filtered=active.filter(p=>(p.msName||'').toLowerCase().includes(q));
     const list=document.getElementById('pages-list');
@@ -431,8 +575,7 @@
         const raw=inp.value.trim().replace(/\.[^/.]+$/,'');
         if(!isValidMS(raw)){showToast('⚠️ Format masih salah. Contoh: MS001.txt');return}
         const msName=raw.toUpperCase();
-        updateDoc(doc(db,'users',currentUser.uid,'kamus',currentKamusId,'pages',p.id),
-          {status:'active',msName,msNumber:getMSNum(msName),originalName:inp.value.trim()});
+        updateDoc(pageDoc(p.id),{status:'active',msName,msNumber:getMSNum(msName),originalName:inp.value.trim()});
         showToast('✅ '+msName+' dikembalikan!');
       };
       bDel.onclick=()=>deletePage(p.id,p.storagePath);
@@ -448,7 +591,6 @@
   // ── RENDER DONE ────────────────────────────────────────────────
   function renderDone(){
     const done=allPages.filter(p=>p.status==='done').sort((a,b)=>getMSNum(a.msName||'')-getMSNum(b.msName||''));
-    // storagePath disertakan untuk getBytes()
     const dVim=done.map(p=>({msName:p.msName,url:p.storageUrl,id:p.id,originalName:p.originalName,storagePath:p.storagePath}));
     document.getElementById('done-count').textContent=done.length;
     const list=document.getElementById('done-list');
@@ -483,13 +625,13 @@
 
   // ── STATUS / DELETE ────────────────────────────────────────────
   async function setStatus(id,status){
-    await updateDoc(doc(db,'users',currentUser.uid,'kamus',currentKamusId,'pages',id),{status});
+    await updateDoc(pageDoc(id),{status});
     showToast(status==='done'?'✅ Ditanda selesai!':'↩️ Dikembalikan ke senarai fail.');
   }
   async function deletePage(id,storagePath){
     if(!confirm('Padam fail ini?'))return;
     if(storagePath)try{await deleteObject(sRef(storage,storagePath))}catch(_){}
-    await deleteDoc(doc(db,'users',currentUser.uid,'kamus',currentKamusId,'pages',id));
+    await deleteDoc(pageDoc(id));
     showToast('Fail dipadam.');
   }
 
@@ -505,7 +647,7 @@
     const val=parseInt(document.getElementById('ms-number-input').value);
     if(!val||val<1){showToast('⚠️ Masukkan nombor yang sah.');return}
     const msName=buildMS(val);
-    await updateDoc(doc(db,'users',currentUser.uid,'kamus',currentKamusId,'pages',editingPageId),{msName,msNumber:val});
+    await updateDoc(pageDoc(editingPageId),{msName,msNumber:val});
     document.getElementById('edit-ms-modal').classList.remove('open');editingPageId=null;
     showToast('✅ Dikemaskini: '+msName);
   };
@@ -533,10 +675,9 @@
   fileInput.addEventListener('change',e=>{handleFiles([...e.target.files]);fileInput.value=''});
 
   function handleFiles(files){
-    if(!currentUser||!currentKamusId)return;
+    if(!currentUser||!currentKamusId||!currentJKCode)return;
     const txts=files.filter(f=>f.name.endsWith('.txt')||f.type==='text/plain');
     if(!txts.length){showToast('⚠️ Pilih fail .txt sahaja.');return}
-    // Duplicate detection
     const existingMS=new Set(allPages.filter(p=>p.status==='active'||p.status==='done').map(p=>(p.msName||'').toUpperCase()));
     const toUpload=[],dups=[];
     for(const f of txts){
@@ -560,7 +701,8 @@
     return new Promise(resolve=>{
       const orig=file.name,base=orig.replace(/\.[^/.]+$/,''),valid=isValidMS(base);
       const msName=valid?base.toUpperCase():null,id=uid6();
-      const path=`users/${currentUser.uid}/kamus/${currentKamusId}/${id}.txt`;
+      // Storage path masukkan jenis kata
+      const path=`users/${currentUser.uid}/kamus/${currentKamusId}/jk/${currentJKCode}/${id}.txt`;
       const pList=document.getElementById('upload-progress-list');
       const item=document.createElement('div');item.className='upload-item';
       item.innerHTML=`<div class="upload-item-name">📄 ${esc(orig)}</div>
@@ -575,9 +717,10 @@
           const url=await getDownloadURL(task.snapshot.ref);
           let previewLine='';
           try{const txt=await file.text();previewLine=txt.split('\n')[0].trim().substring(0,60)}catch(_){}
-          await addDoc(collection(db,'users',currentUser.uid,'kamus',currentKamusId,'pages'),{
+          await addDoc(pagesCol(),{
             msName:msName||base,msNumber:msName?getMSNum(msName):0,
             storageUrl:url,storagePath:path,
+            jenisKata:currentJKCode,
             status:valid?'active':'trash',originalName:orig,previewLine,createdAt:Date.now()
           });
           item.remove();
@@ -633,24 +776,18 @@
     const pg=viewerPages[viewerIdx];
     const contentEl=document.getElementById('tv-content');
     const statsEl=document.getElementById('tv-stats');
-
     document.getElementById('tv-ms-label').textContent=pg.msName||'—';
     document.getElementById('tv-filename').textContent=pg.originalName||'dokumen.txt';
     document.getElementById('tv-prev').style.opacity=viewerIdx>0?'1':'.3';
     document.getElementById('tv-next').style.opacity=viewerIdx<viewerPages.length-1?'1':'.3';
     statsEl.textContent=`${viewerIdx+1} / ${viewerPages.length}`;
-
-    // Tunjuk loading spinner
     contentEl.innerHTML='<div class="tv-loading"><div class="tv-spinner"></div>Memuat kandungan...</div>';
-
     try{
       let txt='';
       if(pg.storagePath){
-        // ── Guna Firebase SDK getBytes() — elak CORS/503 sepenuhnya ──
         const bytes=await getBytes(sRef(storage,pg.storagePath));
         txt=new TextDecoder('utf-8').decode(bytes);
       }else{
-        // Fallback fetch untuk data lama tanpa storagePath
         const resp=await fetch(pg.url);
         if(!resp.ok)throw new Error('HTTP '+resp.status);
         txt=await resp.text();
@@ -671,22 +808,19 @@
 
   document.getElementById('tv-close').onclick=closeViewer;
   document.getElementById('tv-copy').onclick=async()=>{
-  const txt=document.getElementById('tv-content').textContent;
-  if(!txt||txt.includes('Memuat')){showToast('⚠️ Tiada teks untuk disalin.');return}
-  try{
-    await navigator.clipboard.writeText(txt);
-    const btn=document.getElementById('tv-copy');
-    btn.textContent='✅ Disalin!';
-    btn.style.background='linear-gradient(135deg,#16a34a,#15803d)';
-    setTimeout(()=>{btn.textContent='📋 Salin';btn.style.background='linear-gradient(135deg,#0891b2,#0e7490)'},2000);
-  }catch(e){
-    showToast('❌ Gagal salin. Cuba semula.');
-  }
-};
+    const txt=document.getElementById('tv-content').textContent;
+    if(!txt||txt.includes('Memuat')){showToast('⚠️ Tiada teks untuk disalin.');return}
+    try{
+      await navigator.clipboard.writeText(txt);
+      const btn=document.getElementById('tv-copy');
+      btn.textContent='✅ Disalin!';
+      btn.style.background='linear-gradient(135deg,#16a34a,#15803d)';
+      setTimeout(()=>{btn.textContent='📋 Salin';btn.style.background='linear-gradient(135deg,#0891b2,#0e7490)'},2000);
+    }catch(e){showToast('❌ Gagal salin. Cuba semula.');}
+  };
   document.getElementById('tv-prev').onclick=()=>{if(viewerIdx>0){viewerIdx--;loadFrame()}};
   document.getElementById('tv-next').onclick=()=>{if(viewerIdx<viewerPages.length-1){viewerIdx++;loadFrame()}};
 
-  // Keyboard navigation
   document.addEventListener('keydown',e=>{
     if(!document.getElementById('text-viewer').classList.contains('open'))return;
     if(e.key==='Escape')closeViewer();
@@ -694,7 +828,6 @@
     if(e.key==='ArrowRight'&&viewerIdx<viewerPages.length-1){viewerIdx++;loadFrame()}
   });
 
-  // Swipe navigation
   let tvTX=0;
   const tvc=document.getElementById('tv-content');
   tvc.addEventListener('touchstart',e=>{tvTX=e.touches[0].clientX},{passive:true});
