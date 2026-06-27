@@ -351,8 +351,9 @@
   function showToast(msg,dur=3200){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');if(toastTmr)clearTimeout(toastTmr);if(dur>0)toastTmr=setTimeout(()=>el.classList.remove('show'),dur)}
   function goTo(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-  const MS_RE=/^MS\d+$/;
-  function isValidMS(n){return MS_RE.test(n.replace(/\.[^/.]+$/,''))}
+const MS_RE=/^(MS\d+)/i;
+function isValidMS(n){return MS_RE.test(n.replace(/\.[^/.]+$/,''))}
+function extractMS(n){const m=n.replace(/\.[^/.]+$/,'').match(MS_RE);return m?m[1].toUpperCase():null}
   function getMSNum(n){const m=String(n).match(/^MS(\d+)$/);return m?parseInt(m[1],10):0}
   function buildMS(n){return'MS'+String(n).padStart(3,'0')}
   function uid6(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5)}
@@ -714,8 +715,8 @@
     const toUpload=[],dups=[];
     for(const f of txts){
       const base=f.name.replace(/\.[^/.]+$/,'');
-      const msName=isValidMS(base)?base.toUpperCase():null;
-      if(msName&&existingMS.has(msName))dups.push(f);
+      const msName=isValidMS(base)?extractMS(base):null;
+            if(msName&&existingMS.has(msName))dups.push(f);
       else toUpload.push(f);
     }
     if(dups.length)showToast(`⚠️ ${dups.length} fail diabaikan — nama sudah wujud`);
@@ -731,8 +732,8 @@
 
   function uploadFileSingle(file){
     return new Promise(resolve=>{
-      const orig=file.name,base=orig.replace(/\.[^/.]+$/,''),valid=isValidMS(base);
-      const msName=valid?base.toUpperCase():null,id=uid6();
+const orig=file.name,base=orig.replace(/\.[^/.]+$/,''),valid=isValidMS(base);
+const msName=valid?extractMS(base):null,id=uid6();
       // Storage path masukkan jenis kata
       const path=`users/${currentUser.uid}/kamus/${currentKamusId}/jk/${currentJKCode}/${id}.txt`;
       const pList=document.getElementById('upload-progress-list');
