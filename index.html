@@ -605,9 +605,9 @@ function extractMS(n){const m=n.replace(/\.[^/.]+$/,'').match(MS_RE);return m?m[
       const inp=div.querySelector('.trash-name-input');
       const[bRe,bDel]=div.querySelectorAll('button');
       bRe.onclick=()=>{
-        const raw=inp.value.trim().replace(/\.[^/.]+$/,'');
-        if(!isValidMS(raw)){showToast('⚠️ Format masih salah. Contoh: MS001.txt');return}
-        const msName=raw.toUpperCase();
+const raw=inp.value.trim().replace(/\.[^/.]+$/,'');
+if(!isValidMS(raw)){showToast('⚠️ Format masih salah. Contoh: MS001.txt');return}
+const msName=extractMS(raw);
         updateDoc(pageDoc(p.id),{status:'active',msName,msNumber:getMSNum(msName),originalName:inp.value.trim()});
         showToast('✅ '+msName+' dikembalikan!');
       };
